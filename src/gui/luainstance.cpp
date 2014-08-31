@@ -1284,6 +1284,7 @@ int CLuaInstance::HintboxPaint(lua_State *L)
 	if (!m)
 		return 0;
 	m->b->paint();
+	CFrameBuffer::getInstance()->blit();
 	return 0;
 }
 
@@ -1578,6 +1579,7 @@ int CLuaInstance::CWindowPaint(lua_State *L)
 		return 0;
 
 	m->w->paint(do_save_bg);
+	CFrameBuffer::getInstance()->blit();
 	return 0;
 }
 
@@ -1737,6 +1739,7 @@ int CLuaInstance::SignalBoxPaint(lua_State *L)
 		return 0;
 
 	m->s->paint(do_save_bg);
+	CFrameBuffer::getInstance()->blit();
 	return 0;
 }
 
