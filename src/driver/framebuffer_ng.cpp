@@ -56,6 +56,7 @@ extern GLFramebuffer *glfb;
 #include <tdgfx/stb04gfx.h>
 extern int gfxfd;
 #endif
+#include <system/set_threadname.h>
 
 extern CPictureViewer * g_PicViewer;
 #define ICON_CACHE_SIZE 1024*1024*2 // 2mb
@@ -180,6 +181,10 @@ CFrameBuffer::CFrameBuffer()
 	memset(green, 0, 256*sizeof(__u16));
 	memset(blue, 0, 256*sizeof(__u16));
 	memset(trans, 0, 256*sizeof(__u16));
+#if HAVE_SPARK_HARDWARE || HAVE_DUCKBOX_HARDWARE
+	autoBlitStatus = false;
+	autoBlitThreadId = 0;
+#endif
 }
 
 CFrameBuffer* CFrameBuffer::getInstance()
@@ -1345,6 +1350,38 @@ void CFrameBuffer::resChange(void)
 void CFrameBuffer::ClearFB(void)
 {
 	accel->ClearFB();
+}
+void *CFrameBuffer::autoBlitThread(void *arg)
+{
+    set_threadname("autoblit");
+    CFrameBuffer *me = (CFrameBuffer *) arg;
+    me->autoBlitThread();
+    pthread_exit(NULL);
+}
+
+void CFrameBuffer::autoBlitThread(void)
+{
+    while (autoBlitStatus)
+    {
+        blit();
+        for (int i = 4; i && autoBlitStatus; i--)
+            usleep(50000);
+    }
+}
+
+void CFrameBuffer::autoBlit(bool b)
+{
+    if (b && !autoBlitThreadId)
+    {
+        autoBlitStatus = true;
+        pthread_create(&autoBlitThreadId, NULL, autoBlitThread, this);
+    }
+    else if (!b && autoBlitThreadId)
+    {
+        autoBlitStatus = false;
+        pthread_join(autoBlitThreadId, NULL);
+        autoBlitThreadId = 0;
+    }
 }
 #endif
 
