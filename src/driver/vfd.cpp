@@ -185,7 +185,7 @@ void CVFD::ShowScrollText(char *str)
 		pthread_join(vfd_scrollText, NULL);
 
 		vfd_scrollText = 0;
-		scrollstr="";
+		scrollstr = (char *) "";
 	}
 
 	//scroll text thread
