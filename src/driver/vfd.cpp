@@ -57,7 +57,7 @@ extern CRemoteControl * g_RemoteControl; /* neutrino.cpp */
 	#define VFDLENGTH 12
 #elif defined (BOXMODEL_ATEVIO7500)
 	#define VFDLENGTH 12
-#elif defined (BOXMODEL_SPARK)
+#elif defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
 	#define VFDLENGTH 4
 #else
 	#define VFDLENGTH 16
@@ -659,7 +659,7 @@ void CVFD::showVolume(const char vol, const bool /*perform_update*/)
 			char vol_chr[64] = "";
 			snprintf(vol_chr, sizeof(vol_chr)-1, "VOL: %d%%", (int)vol);
 			ShowText(vol_chr);
-#elif defined (BOXMODEL_SPARK)
+#elif defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
 			char vol_chr[64] = "";
 			snprintf(vol_chr, sizeof(vol_chr)-1, "%d", (int)vol);
 			ShowText(vol_chr);
@@ -1059,7 +1059,7 @@ void CVFD::ShowIcon(fp_icon icon, bool show)
 #ifdef HAVE_DUCKBOX_HARDWARE
 void CVFD::ClearIcons()
 {
-#if defined (BOXMODEL_ATEVIO7500) || defined (BOXMODEL_SPARK)
+#if defined (BOXMODEL_ATEVIO7500) || (defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162))
 	return;
 #endif
 	for (int id = 0x10; id < FP_ICON_MAX; id++) {

@@ -750,7 +750,7 @@ std::string  CNeutrinoYParser::func_get_boxtype(CyhookHandler *, std::string)
 #if BOXMODEL_UFS922
 	boxname = "ufs922";
 #endif
-#if BOXTYPE_SPARK
+#if defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
 	boxname = "spark";
 #endif
 #if BOXMODEL_SPARK7162
@@ -793,7 +793,7 @@ std::string CNeutrinoYParser::func_get_boxmodel(CyhookHandler *, std::string)
 #if BOXMODEL_UFS922
 	boxmodel = "ufs922";
 #endif
-#if BOXTYPE_SPARK
+#if defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
 	boxmodel = "spark";
 #endif
 #if BOXMODEL_SPARK7162
