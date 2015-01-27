@@ -533,9 +533,9 @@ void CVFD::showTime(bool force)
 				hour = t->tm_hour;
 				minute = t->tm_min;
 #if (defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)) || defined (BOXMODEL_CUBEREVO_250HD)
-				strftime(timestr, 20, "%H:%M", t);
-#else
 				strftime(timestr, 20, "%H%M", t);
+#else
+				strftime(timestr, 20, "%H:%M", t);
 #endif
 				ShowText(timestr);
 			}
