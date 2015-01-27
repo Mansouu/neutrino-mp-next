@@ -57,7 +57,7 @@ extern CRemoteControl * g_RemoteControl; /* neutrino.cpp */
 	#define VFDLENGTH 12
 #elif defined (BOXMODEL_ATEVIO7500)
 	#define VFDLENGTH 12
-#elif defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
+#elif (defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)) || defined (BOXMODEL_CUBEREVO_250HD)
 	#define VFDLENGTH 4
 #else
 	#define VFDLENGTH 16
@@ -532,7 +532,11 @@ void CVFD::showTime(bool force)
 			if(force || ( switch_name_time_cnt == 0 && ((hour != t->tm_hour) || (minute != t->tm_min))) ) {
 				hour = t->tm_hour;
 				minute = t->tm_min;
+#if (defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)) || defined (BOXMODEL_CUBEREVO_250HD)
 				strftime(timestr, 20, "%H:%M", t);
+#else
+				strftime(timestr, 20, "%H%M", t);
+#endif
 				ShowText(timestr);
 			}
 		}
@@ -659,11 +663,11 @@ void CVFD::showVolume(const char vol, const bool /*perform_update*/)
 			char vol_chr[64] = "";
 			snprintf(vol_chr, sizeof(vol_chr)-1, "VOL: %d%%", (int)vol);
 			ShowText(vol_chr);
-#elif defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)
+#elif (defined HAVE_SPARK_HARDWARE && !defined (BOXMODEL_SPARK7162)) || defined (BOXMODEL_CUBEREVO_250HD)
 			char vol_chr[64] = "";
 			snprintf(vol_chr, sizeof(vol_chr)-1, "%d", (int)vol);
 			ShowText(vol_chr);
-#elif defined (BOXMODEL_FORTIS_HDBOX) || defined (BOXMODEL_ATEVIO7500) || defined (BOXMODEL_UFS912) || defined (BOXMODEL_UFS913) || defined (BOXMODEL_CUBEREVO) || defined (BOXMODEL_CUBEREVO_MINI2) || defined (BOXMODEL_CUBEREVO_2000HD)
+#elif defined (BOXMODEL_FORTIS_HDBOX) || defined (BOXMODEL_ATEVIO7500) || defined (BOXMODEL_UFS912) || defined (BOXMODEL_UFS913) || defined (BOXMODEL_CUBEREVO) || defined (BOXMODEL_CUBEREVO_MINI) || defined (BOXMODEL_CUBEREVO_MINI2) || defined (BOXMODEL_CUBEREVO_2000HD)
 			char vol_chr[64] = "";
 			snprintf(vol_chr, sizeof(vol_chr)-1, "Volume: %d%%", (int)vol);
 			ShowText(vol_chr);
@@ -1023,7 +1027,9 @@ void CVFD::Clear()
 	else
 		text[0] = 0;
 #else
-#if defined (BOXMODEL_OCTAGON1008) || defined (BOXMODEL_TF7700)
+#if defined (BOXMODEL_CUBEREVO_250HD)
+	ShowText("    ");
+#elif defined (BOXMODEL_OCTAGON1008) || defined (BOXMODEL_TF7700)
 	ShowText("        ");
 #elif defined (BOXMODEL_FORTIS_HDBOX) || defined (BOXMODEL_ATEVIO7500)
 	ShowText("            ");
