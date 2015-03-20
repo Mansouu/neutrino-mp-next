@@ -39,7 +39,10 @@ libzapit_a_SOURCES = \
 	scansdt.cpp \
 	transponder.cpp \
 	zapit.cpp
-#	fastscan.cpp
+
+if ENABLE_FASTSCAN
+libzapit_a_SOURCES += fastscan.cpp
+endif
 
 bin_PROGRAMS = pzapit
 sbin_PROGRAMS = udpstreampes
